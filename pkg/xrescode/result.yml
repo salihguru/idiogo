@@ -1,0 +1,17 @@
+- code: 1000
+  key: ValidationFailed
+  message: base_validation_failed
+  http: 422
+  grpc: 3
+
+- code: 1001
+  key: Failed
+  message: base_failed
+  http: 500
+  grpc: 13
+
+- code: 1002
+  key: NotFound
+  message: base_not_found
+  http: 404
+  grpc: 5

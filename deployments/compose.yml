@@ -1,0 +1,42 @@
+name: idiogo
+services:
+      
+  idiogo-pg:
+    image: postgres:15-alpine
+    container_name: "idiogo-db"
+    volumes:
+      - ../tmp/db:/var/lib/postgresql
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: idiogo
+      POSTGRES_PASSWORD: idiogo
+      POSTGRES_DB: idiogo
+      DATADIR: /var/lib/postgresql
+    networks:
+      - idiogo-compose
+
+  idiogo-app:
+    build:
+      context: ..
+      dockerfile: cmd/serve/Dockerfile
+      target: production
+    image: github.com/salihguru/idiogo:latest
+    container_name: idiogo-app
+    restart: unless-stopped
+    ports:
+      - "4041:4041"
+    volumes:
+      - ./config.yml:/app/config.yaml
+    environment:
+      - HTTP_PORT=4041
+    depends_on:
+      - idiogo-pg
+    networks:
+      - idiogo-compose
+      
+networks:
+  idiogo-compose:
+    name: idiogo-compose
+    driver: bridge
+

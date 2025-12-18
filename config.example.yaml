@@ -1,0 +1,149 @@
+# idiogo Configuration Example
+# This file contains all available configuration options with detailed explanations.
+# Copy this file to config.yaml and customize for your environment.
+
+# REST API Server Configuration
+rest:
+  # Host address to bind the server to
+  # Use "0.0.0.0" to listen on all interfaces (recommended for Docker)
+  # Use "localhost" or "127.0.0.1" for local development only
+  host: 0.0.0.0
+  
+  # Port number for the REST API server
+  # Default: 4041
+  # Make sure this port is not already in use
+  port: 4041
+
+# Database Configuration
+db:
+  # Database host address
+  # Use "localhost" for local database
+  # Use service name (e.g., "idiogo-pg") when using Docker Compose
+  host: localhost
+  
+  # Database port
+  # PostgreSQL default: 5432
+  # Must be a string value
+  port: "5432"
+  
+  # Database username
+  # For development: use simple username
+  # For production: use strong credentials from secrets management
+  user: idiogo
+  
+  # Database password
+  # WARNING: Never commit production passwords to Git!
+  # For production: use environment variables or secrets management
+  pass: idiogo
+  
+  # Database name
+  # The name of the database to connect to
+  name: idiogo
+  
+  # SSL Mode for database connection
+  # Options:
+  #   - disable: No SSL (development only)
+  #   - require: SSL required but no certificate verification
+  #   - verify-ca: Verify CA certificate
+  #   - verify-full: Verify CA and hostname
+  # For production: use "require" or higher
+  ssl_mode: disable
+  
+  # Auto-run database migrations on startup
+  # Set to true for development to automatically update schema
+  # Set to false for production and handle migrations manually
+  migrate: true
+  
+  # Enable SQL query logging
+  # Set to true for development to see all SQL queries
+  # Set to false for production to improve performance
+  debug: true
+
+# Internationalization (i18n) Configuration
+i18n:
+  # List of supported locales
+  # Add language codes for all languages you want to support
+  # Translation files should exist in the locales directory
+  locales:
+    - en  # English
+    - tr  # Turkish
+  
+  # Default locale when no Accept-Language header is provided
+  # Should be one of the locales listed above
+  default: en
+  
+  # Directory containing translation files
+  # Translation files should be named: {locale}.toml
+  # Example: en.toml, tr.toml
+  dir: "./assets/locales"
+
+# Additional configuration sections can be added here as your application grows:
+
+# Example: Redis Cache Configuration (not implemented yet)
+# redis:
+#   host: localhost
+#   port: "6379"
+#   password: ""
+#   db: 0
+#   enabled: false
+
+# Example: JWT Authentication Configuration (not implemented yet)
+# jwt:
+#   secret: "your-secret-key"
+#   expiration: 3600  # seconds
+#   issuer: "idiogo"
+
+# Example: CORS Configuration (not implemented yet)
+# cors:
+#   enabled: true
+#   allowed_origins:
+#     - "http://localhost:3000"
+#     - "https://yourdomain.com"
+#   allowed_methods:
+#     - GET
+#     - POST
+#     - PUT
+#     - PATCH
+#     - DELETE
+#   allowed_headers:
+#     - "Content-Type"
+#     - "Authorization"
+
+# Example: Logging Configuration (not implemented yet)
+# logging:
+#   level: info  # debug, info, warn, error
+#   format: json  # json, text
+#   output: stdout  # stdout, stderr, file path
+
+# Example: Rate Limiting Configuration (not implemented yet)
+# rate_limit:
+#   enabled: true
+#   requests_per_minute: 60
+#   burst: 10
+
+# Example: Email Configuration (not implemented yet)
+# email:
+#   smtp_host: smtp.gmail.com
+#   smtp_port: 587
+#   smtp_user: your-email@gmail.com
+#   smtp_password: your-password
+#   from_address: noreply@yourdomain.com
+#   from_name: idiogo
+
+# Example: Storage Configuration (not implemented yet)
+# storage:
+#   type: local  # local, s3, gcs
+#   local_path: ./uploads
+#   # For S3:
+#   # s3_bucket: your-bucket
+#   # s3_region: us-east-1
+#   # s3_access_key: your-access-key
+#   # s3_secret_key: your-secret-key
+
+# Notes:
+# - Use environment variables for sensitive data in production
+# - Keep this file out of version control if it contains secrets
+# - Use different config files for different environments:
+#   - config.dev.yaml (development)
+#   - config.staging.yaml (staging)
+#   - config.prod.yaml (production)
