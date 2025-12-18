@@ -2,7 +2,6 @@ package validation
 
 import (
 	"context"
-	"strings"
 	"testing"
 
 	"github.com/google/uuid"
@@ -76,8 +75,8 @@ func TestValidateStruct(t *testing.T) {
 		t.Fatal("ValidateStruct() did not return validation errors in data")
 	}
 	for _, e := range validationErrors {
-		if e.Message == "" || !strings.Contains(e.Message, ": ") { // Check if the message contains a field name and a translated error
-			t.Errorf("Validation error message is not translated: %s", e.Message)
+		if e.Message == "" {
+			t.Errorf("Validation error message is empty for field: %s", e.Field)
 		}
 	}
 

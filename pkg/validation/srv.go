@@ -2,6 +2,7 @@ package validation
 
 import (
 	"context"
+	"regexp"
 	"strings"
 
 	"github.com/go-playground/locales/en"
@@ -21,7 +22,63 @@ type Srv struct {
 
 func New(i18n *i18np.I18n) *Srv {
 	v := validator.New()
+	
+	// Register custom validators
+	v.RegisterValidation("username", validateUsername)
+	v.RegisterValidation("password", validatePassword)
+	v.RegisterValidation("locale", validateLocale)
+	v.RegisterValidation("slug", validateSlug)
+	v.RegisterValidation("gender", validateGender)
+	v.RegisterValidation("phone", validatePhone)
+	
 	return &Srv{validator: v, uni: ut.New(tr.New(), en.New()), i18n: i18n}
+}
+
+// Custom validation functions
+func validateUsername(fl validator.FieldLevel) bool {
+	username := fl.Field().String()
+	if len(username) < 3 || len(username) > 20 {
+		return false
+	}
+	matched, _ := regexp.MatchString("^[a-zA-Z0-9_]+$", username)
+	return matched
+}
+
+func validatePassword(fl validator.FieldLevel) bool {
+	password := fl.Field().String()
+	if len(password) < 8 {
+		return false
+	}
+	// Check for at least one uppercase, one lowercase, one digit, and one special char
+	hasUpper := regexp.MustCompile(`[A-Z]`).MatchString(password)
+	hasLower := regexp.MustCompile(`[a-z]`).MatchString(password)
+	hasDigit := regexp.MustCompile(`[0-9]`).MatchString(password)
+	hasSpecial := regexp.MustCompile(`[!@#$%^&*(),.?":{}|<>]`).MatchString(password)
+	return hasUpper && hasLower && hasDigit && hasSpecial
+}
+
+func validateLocale(fl validator.FieldLevel) bool {
+	locale := fl.Field().String()
+	matched, _ := regexp.MatchString(localeRegexp, locale)
+	return matched
+}
+
+func validateSlug(fl validator.FieldLevel) bool {
+	slug := fl.Field().String()
+	matched, _ := regexp.MatchString(slugRegexp, slug)
+	return matched
+}
+
+func validateGender(fl validator.FieldLevel) bool {
+	gender := fl.Field().String()
+	matched, _ := regexp.MatchString(genderRegexp, gender)
+	return matched
+}
+
+func validatePhone(fl validator.FieldLevel) bool {
+	phone := fl.Field().String()
+	matched, _ := regexp.MatchString(phoneWithCountryCodeRegexp, phone)
+	return matched
 }
 
 func (s *Srv) translate(ctx context.Context, err validator.FieldError) string {
